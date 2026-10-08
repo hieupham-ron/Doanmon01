@@ -1,8 +1,13 @@
 Project: Hệ thống lưu kho tự động
+
 Lớp học phần: Đồ án chuyên ngành Cơ điện tử
+
 Mã lớp học phần: EMA3148
+
 Giảng viên: PGS. TS. Phạm Mạnh Thắng
+
 Trợ giảng: KS. Nguyễn Quốc Trưởng
+
 Trường: Đại học Công nghệ, ĐHQGHN
 
 Thành viên nhóm
