@@ -84,9 +84,9 @@
             this.grpObject.Controls.Add(this.lblTarget);
             this.grpObject.Controls.Add(this.lblConfidence);
             this.grpObject.Controls.Add(this.lblObjectType);
-            this.grpObject.Location = new System.Drawing.Point(5, 361);
+            this.grpObject.Location = new System.Drawing.Point(713, 275);
             this.grpObject.Name = "grpObject";
-            this.grpObject.Size = new System.Drawing.Size(300, 130);
+            this.grpObject.Size = new System.Drawing.Size(418, 130);
             this.grpObject.TabIndex = 9;
             this.grpObject.TabStop = false;
             this.grpObject.Text = "Thông tin phôi";
@@ -103,7 +103,7 @@
             // lblConnection
             // 
             this.lblConnection.AutoSize = true;
-            this.lblConnection.Location = new System.Drawing.Point(92, 58);
+            this.lblConnection.Location = new System.Drawing.Point(133, 51);
             this.lblConnection.Name = "lblConnection";
             this.lblConnection.Size = new System.Drawing.Size(128, 16);
             this.lblConnection.TabIndex = 2;
@@ -113,7 +113,7 @@
             // 
             this.btnConnect.Location = new System.Drawing.Point(6, 51);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.Size = new System.Drawing.Size(121, 23);
             this.btnConnect.TabIndex = 1;
             this.btnConnect.Text = "KẾT NỐI";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -133,9 +133,9 @@
             this.grpConnection.Controls.Add(this.lblConnection);
             this.grpConnection.Controls.Add(this.btnConnect);
             this.grpConnection.Controls.Add(this.cbPort);
-            this.grpConnection.Location = new System.Drawing.Point(5, 265);
+            this.grpConnection.Location = new System.Drawing.Point(5, 385);
             this.grpConnection.Name = "grpConnection";
-            this.grpConnection.Size = new System.Drawing.Size(300, 90);
+            this.grpConnection.Size = new System.Drawing.Size(418, 90);
             this.grpConnection.TabIndex = 8;
             this.grpConnection.TabStop = false;
             this.grpConnection.Text = "Kết nối STM32";
@@ -186,9 +186,9 @@
             this.grpControl.Controls.Add(this.btnStop);
             this.grpControl.Controls.Add(this.btnStart);
             this.grpControl.Controls.Add(this.btnHome);
-            this.grpControl.Location = new System.Drawing.Point(5, 152);
+            this.grpControl.Location = new System.Drawing.Point(5, 275);
             this.grpControl.Name = "grpControl";
-            this.grpControl.Size = new System.Drawing.Size(300, 104);
+            this.grpControl.Size = new System.Drawing.Size(418, 104);
             this.grpControl.TabIndex = 7;
             this.grpControl.TabStop = false;
             this.grpControl.Text = "Điều khiển";
@@ -284,7 +284,7 @@
             this.grpWarehouse.Controls.Add(this.btnSlot03);
             this.grpWarehouse.Controls.Add(this.btnSlot02);
             this.grpWarehouse.Controls.Add(this.btnSlot01);
-            this.grpWarehouse.Location = new System.Drawing.Point(559, 46);
+            this.grpWarehouse.Location = new System.Drawing.Point(873, 12);
             this.grpWarehouse.Name = "grpWarehouse";
             this.grpWarehouse.Size = new System.Drawing.Size(258, 248);
             this.grpWarehouse.TabIndex = 6;
@@ -303,9 +303,9 @@
             // 
             // picCamera
             // 
-            this.picCamera.Location = new System.Drawing.Point(14, 21);
+            this.picCamera.Location = new System.Drawing.Point(3, 3);
             this.picCamera.Name = "picCamera";
-            this.picCamera.Size = new System.Drawing.Size(100, 50);
+            this.picCamera.Size = new System.Drawing.Size(412, 217);
             this.picCamera.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picCamera.TabIndex = 0;
             this.picCamera.TabStop = false;
@@ -315,7 +315,7 @@
             this.pnlCamera.Controls.Add(this.picCamera);
             this.pnlCamera.Location = new System.Drawing.Point(5, 46);
             this.pnlCamera.Name = "pnlCamera";
-            this.pnlCamera.Size = new System.Drawing.Size(300, 100);
+            this.pnlCamera.Size = new System.Drawing.Size(418, 223);
             this.pnlCamera.TabIndex = 5;
             // 
             // Form2
