@@ -1,252 +1,147 @@
-﻿
-using System;
+﻿using System;
 using System.Drawing;
-using System.IO.Ports;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
     public partial class Form2 : Form
     {
-        private SerialPort serialPort = new SerialPort();
-        private bool[] slotOccupied = new bool[9];
-        private readonly string[] slotNames =
-        {
-            "btnSlot01", "btnSlot02", "btnSlot03",
-            "btnSlot04", "btnSlot05", "btnSlot06",
-            "btnSlot07", "btnSlot08", "btnSlot09"
-        };
+        private TcpListener videoListener;
+        private volatile bool isVideoRunning = true;
 
         public Form2()
         {
             InitializeComponent();
+            picCamera.SizeMode = PictureBoxSizeMode.Zoom; // vừa khung, giữ tỉ lệ
+            StartVideoServer();
+        }
 
-            // Hiển thị trạng thái ban đầu
-            for (int i = 0; i < slotOccupied.Length; i++)
+        private void Form2_Load(object sender, EventArgs e) { }
+
+        // =========================================
+        // TCP SERVER NHẬN LUỒNG CAMERA (PORT 8889)
+        // =========================================
+
+        // Đọc đủ count byte, trả về false nếu kết nối bị đóng
+        private static bool ReadExactly(NetworkStream stream, byte[] buffer, int count)
+        {
+            int total = 0;
+            while (total < count)
             {
-                slotOccupied[i] = false;
+                int n = stream.Read(buffer, total, count - total);
+                if (n == 0) return false;
+                total += n;
             }
+            return true;
+        }
 
-            if (picCamera != null)
+        private void StartVideoServer()
+        {
+            Task.Run(() =>
             {
-                picCamera.BackColor = Color.FromArgb(35, 35, 35);
-                picCamera.SizeMode = PictureBoxSizeMode.Zoom;
-                picCamera.Paint += PicCamera_Paint;
-            }
-        }
-
-        private void Form2_Load(object sender, EventArgs e)
-        {
-            RefreshComPorts();
-            ResetInterface();
-        }
-
-        private void RefreshComPorts()
-        {
-            string currentPort = cbPort.Text;
-
-            cbPort.Items.Clear();
-            cbPort.Items.AddRange(SerialPort.GetPortNames());
-
-            if (cbPort.Items.Contains(currentPort))
-                cbPort.SelectedItem = currentPort;
-
-            lblConnection.Text = serialPort.IsOpen
-                ? "Trạng thái: ONLINE"
-                : "Trạng thái: OFFLINE";
-        }
-
-        private void PicCamera_Paint(object sender, PaintEventArgs e)
-        {
-            if (picCamera.Image != null)
-                return;
-
-            string message = "CAMERA CHUA KET NOI";
-
-            using (Font font = new Font("Arial", 12, FontStyle.Bold))
-            using (Brush brush = new SolidBrush(Color.White))
-            {
-                SizeF size = e.Graphics.MeasureString(message, font);
-
-                e.Graphics.DrawString(
-                    message,
-                    font,
-                    brush,
-                    (picCamera.Width - size.Width) / 2,
-                    (picCamera.Height - size.Height) / 2
-                );
-            }
-        }
-
-        // Xử lý trạng thái 9 ô kho
-        private void Slot_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn == null)
-                return;
-
-            int index = Array.IndexOf(slotNames, btn.Name);
-            if (index < 0)
-                return;
-
-            slotOccupied[index] = !slotOccupied[index];
-
-            UpdateSlot(index);
-
-            lblTarget.Text = "Vị trí kho: Ô " +
-                (index + 1).ToString("00");
-        }
-
-        private void UpdateSlot(int index)
-        {
-            Control[] controls = Controls.Find(
-                slotNames[index], true);
-
-            if (controls.Length == 0)
-                return;
-
-            Button btn = controls[0] as Button;
-            if (btn == null)
-                return;
-
-            string number = (index + 1).ToString("00");
-
-            if (slotOccupied[index])
-            {
-                btn.Text = number + " - DAY";
-                btn.BackColor = Color.Gold;
-            }
-            else
-            {
-                btn.Text = number;
-                btn.BackColor = SystemColors.Control;
-            }
-        }
-
-        private void btnSlot01_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot02_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot03_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot04_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot05_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot06_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot07_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot08_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-        private void btnSlot09_Click(object sender, EventArgs e) => Slot_Click(sender, e);
-
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (serialPort.IsOpen)
+                try
                 {
-                    serialPort.Close();
-                    lblConnection.Text = "Trạng thái: OFFLINE";
-                    btnConnect.Text = "KẾT NỐI";
-                    return;
+                    videoListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8889);
+                    videoListener.Start();
+
+                    while (isVideoRunning)
+                    {
+                        // Chờ Python kết nối đến
+                        using (TcpClient client = videoListener.AcceptTcpClient())
+                        using (NetworkStream stream = client.GetStream())
+                        {
+                            byte[] sizeBuffer = new byte[4];
+                            byte[] imageBuffer = new byte[0];
+
+                            while (isVideoRunning)
+                            {
+                                // Đọc 4 byte kích thước ảnh
+                                if (!ReadExactly(stream, sizeBuffer, 4)) break;
+
+                                // Python gửi big-endian (">L") nên phải đảo byte
+                                if (BitConverter.IsLittleEndian) Array.Reverse(sizeBuffer);
+                                int imageSize = BitConverter.ToInt32(sizeBuffer, 0);
+
+                                if (imageSize <= 0 || imageSize > 10000000) break; // dữ liệu rác
+
+                                if (imageBuffer.Length < imageSize)
+                                    imageBuffer = new byte[imageSize];
+
+                                // Đọc nội dung ảnh JPEG
+                                if (!ReadExactly(stream, imageBuffer, imageSize)) break;
+
+                                Bitmap bmpCopy;
+                                using (var ms = new MemoryStream(imageBuffer, 0, imageSize))
+                                using (var bmp = new Bitmap(ms))
+                                {
+                                    bmpCopy = new Bitmap(bmp);
+                                }
+
+                                if (IsDisposed || !isVideoRunning)
+                                {
+                                    bmpCopy.Dispose();
+                                    break;
+                                }
+
+                                try
+                                {
+                                    // Hiển thị lên picCamera
+                                    this.BeginInvoke((MethodInvoker)(() =>
+                                    {
+                                        var old = picCamera.Image;
+                                        picCamera.Image = bmpCopy;
+                                        if (old != null) old.Dispose();
+                                    }));
+                                }
+                                catch (InvalidOperationException)
+                                {
+                                    bmpCopy.Dispose();
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
-
-                RefreshComPorts();
-
-                if (string.IsNullOrWhiteSpace(cbPort.Text))
+                catch (SocketException) { /* listener bị Stop khi đóng form */ }
+                catch (Exception ex)
                 {
-                    MessageBox.Show(
-                        "Chưa tìm thấy cổng COM. Hãy kiểm tra thiết bị.",
-                        "Thông báo");
-                    return;
+                    System.Diagnostics.Debug.WriteLine("Video server loi: " + ex);
                 }
-
-                serialPort.PortName = cbPort.Text;
-                serialPort.BaudRate = 115200;
-                serialPort.NewLine = "\n";
-                serialPort.Open();
-
-                lblConnection.Text = "Trạng thái: ONLINE";
-                btnConnect.Text = "NGẮT KẾT NỐI";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Không thể kết nối COM:\n" + ex.Message,
-                    "Lỗi kết nối");
-            }
-        }
-
-        private void SendCommand(string command)
-        {
-            if (!serialPort.IsOpen)
-            {
-                MessageBox.Show(
-                    "Chưa kết nối STM32. Lệnh chưa được gửi.",
-                    "Thông báo");
-                return;
-            }
-
-            try
-            {
-                serialPort.WriteLine(command);
-                lblConnection.Text = "Trạng thái: Đã gửi " + command;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi gửi lệnh: " + ex.Message);
-            }
-        }
-
-        private void btnHome_Click(object sender, EventArgs e)
-        {
-            SendCommand("HOME");
-        }
-
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            // Dữ liệu mô phỏng, chưa phải kết quả nhận dạng thật
-            lblObjectType.Text = "Loại phôi: Phôi A";
-            lblConfidence.Text = "Độ tin cậy: Chưa đo";
-            lblTarget.Text = "Vị trí kho: Ô 05";
-
-            if (serialPort.IsOpen)
-                SendCommand("START");
-            else
-                lblConnection.Text = "Trạng thái: Mô phỏng";
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            SendCommand("STOP");
-        }
-
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            ResetInterface();
-        }
-
-        private void ResetInterface()
-        {
-            lblObjectType.Text = "Loại phôi: ---";
-            lblConfidence.Text = "Độ tin cậy: ---";
-            lblTarget.Text = "Vị trí kho: ---";
-
-            for (int i = 0; i < slotOccupied.Length; i++)
-            {
-                slotOccupied[i] = false;
-                UpdateSlot(i);
-            }
-
-            if (lblConnection != null)
-            {
-                lblConnection.Text = serialPort.IsOpen
-                    ? "Trạng thái: ONLINE"
-                    : "Trạng thái: OFFLINE";
-            }
+            });
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (serialPort.IsOpen)
-                serialPort.Close();
-
-            serialPort.Dispose();
+            isVideoRunning = false;
+            try { if (videoListener != null) videoListener.Stop(); } catch { }
             base.OnFormClosing(e);
+        }
+
+        // =========================================
+        // CÁC HÀM SỰ KIỆN NÚT BẤM
+        // =========================================
+        private void btnConnect_Click(object sender, EventArgs e) { }
+        private void btnStop_Click(object sender, EventArgs e) { }
+        private void btnStart_Click(object sender, EventArgs e) { }
+        private void btnHome_Click(object sender, EventArgs e) { }
+        private void btnReset_Click(object sender, EventArgs e) { }
+        private void btnSlot01_Click(object sender, EventArgs e) { }
+        private void btnSlot02_Click(object sender, EventArgs e) { }
+        private void btnSlot03_Click(object sender, EventArgs e) { }
+        private void btnSlot04_Click(object sender, EventArgs e) { }
+        private void btnSlot05_Click(object sender, EventArgs e) { }
+        private void btnSlot06_Click(object sender, EventArgs e) { }
+        private void btnSlot07_Click(object sender, EventArgs e) { }
+        private void btnSlot08_Click(object sender, EventArgs e) { }
+        private void btnSlot09_Click(object sender, EventArgs e) { }
+
+        private void picCamera_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

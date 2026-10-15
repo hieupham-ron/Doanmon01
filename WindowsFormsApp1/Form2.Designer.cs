@@ -53,12 +53,19 @@
             this.btnSlot01 = new System.Windows.Forms.Button();
             this.picCamera = new System.Windows.Forms.PictureBox();
             this.pnlCamera = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.lblCount = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.grpObject.SuspendLayout();
             this.grpConnection.SuspendLayout();
             this.grpControl.SuspendLayout();
             this.grpWarehouse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).BeginInit();
             this.pnlCamera.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTarget
@@ -84,7 +91,7 @@
             this.grpObject.Controls.Add(this.lblTarget);
             this.grpObject.Controls.Add(this.lblConfidence);
             this.grpObject.Controls.Add(this.lblObjectType);
-            this.grpObject.Location = new System.Drawing.Point(713, 275);
+            this.grpObject.Location = new System.Drawing.Point(784, 15);
             this.grpObject.Name = "grpObject";
             this.grpObject.Size = new System.Drawing.Size(418, 130);
             this.grpObject.TabIndex = 9;
@@ -133,9 +140,9 @@
             this.grpConnection.Controls.Add(this.lblConnection);
             this.grpConnection.Controls.Add(this.btnConnect);
             this.grpConnection.Controls.Add(this.cbPort);
-            this.grpConnection.Location = new System.Drawing.Point(5, 385);
+            this.grpConnection.Location = new System.Drawing.Point(477, 122);
             this.grpConnection.Name = "grpConnection";
-            this.grpConnection.Size = new System.Drawing.Size(418, 90);
+            this.grpConnection.Size = new System.Drawing.Size(288, 90);
             this.grpConnection.TabIndex = 8;
             this.grpConnection.TabStop = false;
             this.grpConnection.Text = "Kết nối STM32";
@@ -186,9 +193,9 @@
             this.grpControl.Controls.Add(this.btnStop);
             this.grpControl.Controls.Add(this.btnStart);
             this.grpControl.Controls.Add(this.btnHome);
-            this.grpControl.Location = new System.Drawing.Point(5, 275);
+            this.grpControl.Location = new System.Drawing.Point(477, 12);
             this.grpControl.Name = "grpControl";
-            this.grpControl.Size = new System.Drawing.Size(418, 104);
+            this.grpControl.Size = new System.Drawing.Size(288, 104);
             this.grpControl.TabIndex = 7;
             this.grpControl.TabStop = false;
             this.grpControl.Text = "Điều khiển";
@@ -265,7 +272,7 @@
             // 
             // btnSlot02
             // 
-            this.btnSlot02.Location = new System.Drawing.Point(93, 25);
+            this.btnSlot02.Location = new System.Drawing.Point(93, 21);
             this.btnSlot02.Name = "btnSlot02";
             this.btnSlot02.Size = new System.Drawing.Size(70, 60);
             this.btnSlot02.TabIndex = 1;
@@ -284,7 +291,7 @@
             this.grpWarehouse.Controls.Add(this.btnSlot03);
             this.grpWarehouse.Controls.Add(this.btnSlot02);
             this.grpWarehouse.Controls.Add(this.btnSlot01);
-            this.grpWarehouse.Location = new System.Drawing.Point(873, 12);
+            this.grpWarehouse.Location = new System.Drawing.Point(784, 151);
             this.grpWarehouse.Name = "grpWarehouse";
             this.grpWarehouse.Size = new System.Drawing.Size(258, 248);
             this.grpWarehouse.TabIndex = 6;
@@ -303,32 +310,88 @@
             // 
             // picCamera
             // 
-            this.picCamera.Location = new System.Drawing.Point(3, 3);
+            this.picCamera.Location = new System.Drawing.Point(7, 3);
             this.picCamera.Name = "picCamera";
-            this.picCamera.Size = new System.Drawing.Size(412, 217);
+            this.picCamera.Size = new System.Drawing.Size(449, 317);
             this.picCamera.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picCamera.TabIndex = 0;
             this.picCamera.TabStop = false;
+            this.picCamera.Click += new System.EventHandler(this.picCamera_Click);
             // 
             // pnlCamera
             // 
             this.pnlCamera.Controls.Add(this.picCamera);
-            this.pnlCamera.Location = new System.Drawing.Point(5, 46);
+            this.pnlCamera.Location = new System.Drawing.Point(12, 12);
             this.pnlCamera.Name = "pnlCamera";
-            this.pnlCamera.Size = new System.Drawing.Size(418, 223);
+            this.pnlCamera.Size = new System.Drawing.Size(459, 323);
             this.pnlCamera.TabIndex = 5;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.lblCount);
+            this.groupBox1.Controls.Add(this.btnClear);
+            this.groupBox1.Controls.Add(this.btnExport);
+            this.groupBox1.Location = new System.Drawing.Point(12, 341);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(459, 291);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "nhật kí";
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(6, 207);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 1;
+            this.btnExport.Text = "btnExport";
+            this.btnExport.UseVisualStyleBackColor = true;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(6, 236);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 2;
+            this.btnClear.Text = "btnClear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(116, 222);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(55, 16);
+            this.lblCount.TabIndex = 3;
+            this.lblCount.Text = "lblCount";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(46, 44);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(240, 150);
+            this.dataGridView1.TabIndex = 4;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1143, 549);
+            this.ClientSize = new System.Drawing.Size(1282, 653);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpObject);
             this.Controls.Add(this.grpConnection);
             this.Controls.Add(this.grpControl);
             this.Controls.Add(this.grpWarehouse);
             this.Controls.Add(this.pnlCamera);
             this.Name = "Form2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.grpObject.ResumeLayout(false);
@@ -339,6 +402,9 @@
             this.grpWarehouse.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).EndInit();
             this.pnlCamera.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -370,5 +436,10 @@
         private System.Windows.Forms.Button btnSlot01;
         private System.Windows.Forms.PictureBox picCamera;
         private System.Windows.Forms.Panel pnlCamera;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
