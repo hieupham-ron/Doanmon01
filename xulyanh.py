@@ -20,7 +20,6 @@ cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 if not cap.isOpened():
     cap = cv2.VideoCapture(0)
 
-
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
@@ -59,7 +58,7 @@ def classify_shape(contour):
 
 
 # ==========================================
-# HÀM KẾT NỐI TCP TỚI C# (tự thử lại đến khi được)
+# KẾT NỐI TCP TỚI C# (tự thử lại đến khi được)
 # ==========================================
 def connect_to_csharp():
     while True:
@@ -104,6 +103,8 @@ while True:
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
+    detected = ""   # hình hợp lệ lớn nhất trong khung này
+
     for contour in contours:
         area = cv2.contourArea(contour)
         if area < MIN_AREA:
@@ -112,19 +113,22 @@ while True:
         x, y, w, h = cv2.boundingRect(contour)
         shape_name = classify_shape(contour)
 
+        if detected == "" and shape_name != "Khong xac dinh":
+            detected = shape_name
+
         cv2.drawContours(frame, [contour], -1, (0, 255, 0), 2)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)
         cv2.putText(frame, shape_name, (x, max(y - 10, 25)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-    # ---- Gửi khung hình đã xử lý sang C# ----
+    # ---- Gửi sang C#: [4 byte size ảnh][2 byte size meta][meta][ảnh] ----
     try:
         ok, encoded_img = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
         if ok:
             data = encoded_img.tobytes()
-            sock.sendall(struct.pack(">L", len(data)) + data)
+            meta = detected.encode("utf-8")
+            sock.sendall(struct.pack(">LH", len(data), len(meta)) + meta + data)
     except Exception:
-        # C# đóng/mở lại Form2 thì tự kết nối lại
         try:
             sock.close()
         except Exception:
@@ -138,7 +142,7 @@ while True:
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     else:
-        time.sleep(0.01)  # tránh vòng lặp chạy quá nhanh
+        time.sleep(0.01)
 
 # ==========================================
 # DỌN DẸP
