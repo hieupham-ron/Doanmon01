@@ -37,7 +37,37 @@ namespace WindowsFormsApp1
             StartVideoServer();
         }
 
-        private void Form2_Load(object sender, EventArgs e) { }
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            // Apply UI theme
+            try
+            {
+                ThemeManager.ApplyThemeToForm(this);
+            }
+            catch { }
+
+            // Restore slot button visuals based on current slotShape array (if any)
+            for (int i = 0; i < slotButtons.Length; i++)
+            {
+                var b = slotButtons[i];
+                if (b == null) continue;
+                if (!string.IsNullOrEmpty(slotShape[i]))
+                {
+                    b.BackColor = ShapeColor(slotShape[i]);
+                    b.ForeColor = Color.White;
+                    b.Text = (i + 1).ToString("00") + "\n" + slotShape[i];
+                }
+                else
+                {
+                    b.BackColor = ThemeManager.SlotEmpty;
+                    b.ForeColor = Color.Black;
+                    b.Text = (i + 1).ToString("00");
+                }
+            }
+
+            // initial control states
+            try { btnStop.Enabled = false; } catch { }
+        }
 
         // =========================================
         // XỬ LÝ THÔNG TIN PHÔI

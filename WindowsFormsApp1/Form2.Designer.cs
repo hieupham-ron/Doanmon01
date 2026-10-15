@@ -54,10 +54,10 @@
             this.picCamera = new System.Windows.Forms.PictureBox();
             this.pnlCamera = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.lblCount = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.lblCount = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.grpObject.SuspendLayout();
             this.grpConnection.SuspendLayout();
             this.grpControl.SuspendLayout();
@@ -118,9 +118,9 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(6, 51);
+            this.btnConnect.Location = new System.Drawing.Point(6, 68);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(121, 23);
+            this.btnConnect.Size = new System.Drawing.Size(121, 33);
             this.btnConnect.TabIndex = 1;
             this.btnConnect.Text = "KẾT NỐI";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -129,7 +129,7 @@
             // cbPort
             // 
             this.cbPort.FormattingEnabled = true;
-            this.cbPort.Location = new System.Drawing.Point(6, 21);
+            this.cbPort.Location = new System.Drawing.Point(6, 29);
             this.cbPort.Name = "cbPort";
             this.cbPort.Size = new System.Drawing.Size(121, 24);
             this.cbPort.TabIndex = 0;
@@ -142,7 +142,7 @@
             this.grpConnection.Controls.Add(this.cbPort);
             this.grpConnection.Location = new System.Drawing.Point(477, 122);
             this.grpConnection.Name = "grpConnection";
-            this.grpConnection.Size = new System.Drawing.Size(288, 90);
+            this.grpConnection.Size = new System.Drawing.Size(288, 114);
             this.grpConnection.TabIndex = 8;
             this.grpConnection.TabStop = false;
             this.grpConnection.Text = "Kết nối STM32";
@@ -151,7 +151,7 @@
             // 
             this.btnReset.Location = new System.Drawing.Point(95, 59);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(75, 23);
+            this.btnReset.Size = new System.Drawing.Size(75, 29);
             this.btnReset.TabIndex = 3;
             this.btnReset.Text = "rs";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -161,7 +161,7 @@
             // 
             this.btnStop.Location = new System.Drawing.Point(14, 59);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 23);
+            this.btnStop.Size = new System.Drawing.Size(75, 29);
             this.btnStop.TabIndex = 2;
             this.btnStop.Text = "stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -169,9 +169,9 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(95, 28);
+            this.btnStart.Location = new System.Drawing.Point(95, 21);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.Size = new System.Drawing.Size(75, 32);
             this.btnStart.TabIndex = 1;
             this.btnStart.Text = "ST";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -179,9 +179,9 @@
             // 
             // btnHome
             // 
-            this.btnHome.Location = new System.Drawing.Point(14, 31);
+            this.btnHome.Location = new System.Drawing.Point(14, 21);
             this.btnHome.Name = "btnHome";
-            this.btnHome.Size = new System.Drawing.Size(75, 23);
+            this.btnHome.Size = new System.Drawing.Size(75, 32);
             this.btnHome.TabIndex = 0;
             this.btnHome.Text = "home";
             this.btnHome.UseVisualStyleBackColor = true;
@@ -272,7 +272,7 @@
             // 
             // btnSlot02
             // 
-            this.btnSlot02.Location = new System.Drawing.Point(93, 21);
+            this.btnSlot02.Location = new System.Drawing.Point(93, 25);
             this.btnSlot02.Name = "btnSlot02";
             this.btnSlot02.Size = new System.Drawing.Size(70, 60);
             this.btnSlot02.TabIndex = 1;
@@ -339,33 +339,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "nhật kí";
             // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(6, 207);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 23);
-            this.btnExport.TabIndex = 1;
-            this.btnExport.Text = "btnExport";
-            this.btnExport.UseVisualStyleBackColor = true;
-            // 
-            // btnClear
-            // 
-            this.btnClear.Location = new System.Drawing.Point(6, 236);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 2;
-            this.btnClear.Text = "btnClear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            // 
-            // lblCount
-            // 
-            this.lblCount.AutoSize = true;
-            this.lblCount.Location = new System.Drawing.Point(116, 222);
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(55, 16);
-            this.lblCount.TabIndex = 3;
-            this.lblCount.Text = "lblCount";
-            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
@@ -378,6 +351,33 @@
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(240, 150);
             this.dataGridView1.TabIndex = 4;
+            // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(116, 222);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(55, 16);
+            this.lblCount.TabIndex = 3;
+            this.lblCount.Text = "lblCount";
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(6, 236);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 2;
+            this.btnClear.Text = "btnClear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(6, 207);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 1;
+            this.btnExport.Text = "btnExport";
+            this.btnExport.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
